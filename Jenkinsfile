@@ -14,16 +14,16 @@ pipeline {
     stage('Build') {
       steps {
         sh 'mvn -B clean package -DskipTests'
-        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        archiveArtifacts artifacts: 'target/*.war', fingerprint: true
       }
     }
 
     stage('Deploy') {
       steps {
         sh '''
-          PKG_JAR=$(ls target/*.jar | head -n1)
-          pkill -f "$PKG_JAR" || true
-          nohup java -jar "$PKG_JAR" --spring.profiles.active=prod > /tmp/travel-backend.log 2>&1 &
+          PKG_JAR=$(ls target/*.war | head -n1)
+          pkill -f "$PKG_WAR" || true
+          nohup java -jar "$PKG_WAR" --spring.profiles.active=prod > /tmp/travel-backend.log 2>&1 &
         '''
       }
     }
